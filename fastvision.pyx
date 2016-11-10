@@ -4,50 +4,8 @@ from cython cimport view
 from libc.stdlib cimport malloc
 from libc.string cimport memcpy
 
-
-# -------------------------------------------------------------------------------------------------
-# python -c "import FastVision as s; from PIL import Image; s.openImage(Image.open('test.png'))"
 import numpy as np
-cimport numpy as np  # for np.ndarray!
-# from libcpp.string cimport string
-# from libc.string cimport memcpy
-
-# cdef extern from "opencv2/core/core.hpp":
-#     cdef int CV_WINDOW_AUTOSIZE
-#     cdef int CV_8UC3, CV_8UC4
-
-# cdef extern from "opencv2/core/core.hpp" namespace "cv":
-#     cdef cppclass Mat:
-#         Mat() except +
-#         void create(int, int, int)
-#         void* data
-
-# cdef extern from "opencv2/highgui/highgui.hpp" namespace "cv":
-#     void namedWindow(const string, int flag)
-#     void imshow(const string, Mat)
-#     int  waitKey(int delay)
-
-# cdef void ary2cvMat(np.ndarray ary, Mat& out):
-#     assert(ary.ndim==3 and ary.shape[2]==3, "ASSERT::3channel RGB only!!")
-#     ary = np.dstack((ary[..., 2], ary[..., 1], ary[..., 0]))  # RGB -> BGR
-
-#     cdef np.ndarray[np.uint8_t, ndim=3, mode = 'c'] np_buff = np.ascontiguousarray(ary, dtype=np.uint8)
-#     cdef unsigned int* im_buff = <unsigned int*> np_buff.data
-#     cdef int r = ary.shape[0]
-#     cdef int c = ary.shape[1]
-#     out.create(r, c, CV_8UC3)
-#     memcpy(out.data, im_buff, r*c*3)
-
-
-# cdef showMat(Mat m):
-#     namedWindow("WIN", CV_WINDOW_AUTOSIZE)
-#     imshow("WIN", m)
-#     waitKey(0)
-
-# def openImage(pil_img):
-#     cdef Mat m
-#     ary2cvMat(np.array(pil_img), m)
-#     showMat(m)
+cimport numpy as np
 
 
 # -------------------------------------------------------------------------------------------------
@@ -59,6 +17,7 @@ cdef extern from "FastVision.h" namespace "shapes":  # This is why we need the h
         char* get_screen()
         void ximg_meta()
 
+
 # -------------------------------------------------------------------------------------------------
 cdef extern from "Python.h":
     ctypedef struct PyObject
@@ -68,8 +27,7 @@ cdef extern from "Python.h":
         PyBUF_FULL_RO
 
 
-
-# ---------------------
+# -------------------------------------------------------------------------------------------------
 cdef class PyFastVision:
     """THIS is where we define the Python API!!! So it doesn't matter how crappy the C++ API is!
 
@@ -117,20 +75,5 @@ cdef class PyFastVision:
 
         return np.asarray(cy_arr)
 
-        # cdef view.array view_arr = view.array(shape=(1080*1920*4,), itemsize=sizeof(char), format='u8')
-        # view_arr[:] = cy_arr
-        # view_arr.data = self.thisptr.get()
-        # cdef unsigned char [:] carr_view = ximg
-
-        # cdef np.ndarray[unsigned char, ndim=3, mode='c'] np_arr = np.empty((1080, 1920, 4), np.uint8)
-        # return np_arr
-        # return view_arr
-
     def ximg_meta(self):
         self.thisptr.ximg_meta()
-
-    # def area(self):
-    #     return self.thisptr.getArea()
-
-    # def move(self, dx, dy):
-    #     self.thisptr.move(dx, dy)
