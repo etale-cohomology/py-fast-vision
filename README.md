@@ -1,6 +1,6 @@
 # PyFastVision
 
-__PyFastVision__ contains the Python bindings for __FastVision__. Bindings are implemented using Cython.
+__PyFastVision__ contains the Python bindings for [FastVision](https://github.com/etale-cohomology/fast-vision). Bindings are implemented using [Cython](http://cython.org/).
 
 
 ## How to build
